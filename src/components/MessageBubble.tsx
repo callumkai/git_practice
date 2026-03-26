@@ -1,13 +1,28 @@
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
 import { MODELS } from '../types'
 import type { Message } from '../types'
 
-marked.setOptions({ breaks: true })
-
+// Simple markdown renderer — no external dependencies
 function renderMarkdown(text: string): string {
-  const html = marked.parse(text) as string
-  return DOMPurify.sanitize(html)
+  return text
+    // Fenced code blocks
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+    // Inline code
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // Bold
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    // Italic
+    .replace(/_([^_]+)_/g, '<em>$1</em>')
+    // Headers
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+    // Unordered lists (basic)
+    .replace(/^[*\-] (.+)$/gm, '<li>$1</li>')
+    // Line breaks → <br>
+    .replace(/\n/g, '<br>')
+    // Clean up <br> inside block elements
+    .replace(/<br>(<\/(pre|h[123]|li)>)/g, '$1')
+    .replace(/(<(pre|h[123]|li)>)<br>/g, '$1')
 }
 
 function relativeTime(ts: number): string {
@@ -34,28 +49,18 @@ export default function MessageBubble({ message }: Props) {
 
   return (
     <div className={`message-row ${isUser ? 'user' : 'assistant'}`}>
-      {/* Image thumbnails above bubble */}
       {imageAttachments.length > 0 && (
         <div className="message-images">
           {imageAttachments.map((att) => (
-            <img
-              key={att.id}
-              className="message-img"
-              src={att.dataUrl}
-              alt={att.name}
-              title={att.name}
-            />
+            <img key={att.id} className="message-img" src={att.dataUrl} alt={att.name} title={att.name} />
           ))}
         </div>
       )}
 
-      {/* File attachment chips above bubble */}
       {fileAttachments.length > 0 && (
         <div className="message-file-chips">
           {fileAttachments.map((att) => (
-            <span key={att.id} className="file-chip">
-              📄 {att.name}
-            </span>
+            <span key={att.id} className="file-chip">📄 {att.name}</span>
           ))}
         </div>
       )}
@@ -64,27 +69,20 @@ export default function MessageBubble({ message }: Props) {
         <div className="bubble error">⚠️ {message.error}</div>
       ) : isUser ? (
         <div className="bubble">{message.content}</div>
-      ) : message.isSearching && !message.content ? (
-        <div className="bubble">
-          <span className="searching-indicator">Searching the web<span className="searching-dots"></span></span>
-        </div>
       ) : (
         <div
           className="bubble"
+          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
-            __html:
-              message.content
-                ? renderMarkdown(message.content) + (message.isStreaming ? '<span class="cursor"></span>' : '')
-                : (message.isSearching
-                    ? '<span class="searching-indicator">Searching the web<span class="searching-dots"></span></span>'
-                    : '<span class="cursor"></span>'),
+            __html: message.isSearching && !message.content
+              ? '<span class="searching-indicator">Searching the web<span class="searching-dots"></span></span>'
+              : (renderMarkdown(message.content) + (message.isStreaming ? '<span class="cursor"></span>' : '')),
           }}
         />
       )}
+
       <div className="bubble-meta">
-        {!isUser && message.model && (
-          <span className="model-badge">{modelLabel(message.model)}</span>
-        )}
+        {!isUser && message.model && <span className="model-badge">{modelLabel(message.model)}</span>}
         {!isUser && message.model && <span>·</span>}
         <span>{relativeTime(message.timestamp)}</span>
       </div>
