@@ -1,8 +1,13 @@
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 import { MODELS } from '../types'
 import type { Message } from '../types'
 
-interface Props {
-  message: Message
+marked.setOptions({ breaks: true })
+
+function renderMarkdown(text: string): string {
+  const html = marked.parse(text) as string
+  return DOMPurify.sanitize(html)
 }
 
 function relativeTime(ts: number): string {
@@ -14,7 +19,11 @@ function relativeTime(ts: number): string {
 }
 
 function modelLabel(id: string): string {
-  return MODELS.find((m) => m.id === id)?.label ?? id
+  return MODELS.find((m) => m.id === id)?.label.replace('Claude ', '') ?? id
+}
+
+interface Props {
+  message: Message
 }
 
 export default function MessageBubble({ message }: Props) {
@@ -23,20 +32,26 @@ export default function MessageBubble({ message }: Props) {
 
   return (
     <div className={`message-row ${isUser ? 'user' : 'assistant'}`}>
-      <div className={`bubble ${isError ? 'error' : ''}`}>
-        {isError ? (
-          <>⚠️ {message.error}</>
-        ) : (
-          <>
-            {message.content}
-            {message.isStreaming && <span className="bubble-cursor" />}
-          </>
-        )}
-      </div>
+      {isError ? (
+        <div className="bubble error">⚠️ {message.error}</div>
+      ) : isUser ? (
+        <div className="bubble">{message.content}</div>
+      ) : (
+        <div
+          className="bubble"
+          dangerouslySetInnerHTML={{
+            __html:
+              message.content
+                ? renderMarkdown(message.content) + (message.isStreaming ? '<span class="cursor"></span>' : '')
+                : '<span class="cursor"></span>',
+          }}
+        />
+      )}
       <div className="bubble-meta">
         {!isUser && message.model && (
-          <span className="bubble-model-badge">{modelLabel(message.model)}</span>
+          <span className="model-badge">{modelLabel(message.model)}</span>
         )}
+        {!isUser && message.model && <span>·</span>}
         <span>{relativeTime(message.timestamp)}</span>
       </div>
     </div>

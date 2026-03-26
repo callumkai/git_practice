@@ -2,11 +2,19 @@ import { useEffect, useRef } from 'react'
 import type { Message } from '../types'
 import MessageBubble from './MessageBubble'
 
+const SUGGESTIONS = [
+  'Explain quantum computing',
+  'Write a Python web scraper',
+  'Help me debug my code',
+  'Summarize an article',
+]
+
 interface Props {
   messages: Message[]
+  onSuggestion: (text: string) => void
 }
 
-export default function MessageList({ messages }: Props) {
+export default function MessageList({ messages, onSuggestion }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -17,9 +25,16 @@ export default function MessageList({ messages }: Props) {
     return (
       <div className="message-list">
         <div className="empty-state">
-          <div className="empty-state-icon">💬</div>
-          <h2>Start a conversation</h2>
-          <p>Select a model above and send your first message.</p>
+          <div className="empty-state-icon">✦</div>
+          <h2>Claude Chat</h2>
+          <p>Powered by Anthropic. Ask anything.</p>
+          <div className="suggestion-chips">
+            {SUGGESTIONS.map((s) => (
+              <button key={s} className="chip" onClick={() => onSuggestion(s)}>
+                {s}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     )

@@ -28,9 +28,19 @@ export default function App() {
 
   function handleStop() {
     abortRef.current?.abort()
+    setIsLoading(false)
+    setMessages((prev) =>
+      prev.map((m) => (m.isStreaming ? { ...m, isStreaming: false } : m)),
+    )
+  }
+
+  function handleSuggestion(text: string) {
+    handleSend(text)
   }
 
   async function handleSend(text: string) {
+    if (isLoading) return
+
     const userMsg: Message = {
       id: crypto.randomUUID(),
       role: 'user',
@@ -38,7 +48,6 @@ export default function App() {
       isStreaming: false,
       timestamp: Date.now(),
     }
-
     const assistantId = crypto.randomUUID()
     const assistantMsg: Message = {
       id: assistantId,
@@ -49,8 +58,8 @@ export default function App() {
       timestamp: Date.now(),
     }
 
-    const nextMessages = [...messages, userMsg]
-    setMessages([...nextMessages, assistantMsg])
+    const history = [...messages, userMsg]
+    setMessages([...history, assistantMsg])
     setIsLoading(true)
 
     const controller = new AbortController()
@@ -59,7 +68,7 @@ export default function App() {
     await streamMessage({
       apiKey,
       model: selectedModel,
-      messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+      messages: history.map((m) => ({ role: m.role, content: m.content })),
       onToken: (token) => {
         setMessages((prev) =>
           prev.map((m) =>
@@ -78,9 +87,7 @@ export default function App() {
       onError: (error) => {
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantId
-              ? { ...m, isStreaming: false, error }
-              : m,
+            m.id === assistantId ? { ...m, isStreaming: false, error } : m,
           ),
         )
         setIsLoading(false)
@@ -89,16 +96,15 @@ export default function App() {
     })
   }
 
-  if (!apiKey) {
-    return <ApiKeyInput onSave={handleSaveKey} />
-  }
+  if (!apiKey) return <ApiKeyInput onSave={handleSaveKey} />
 
   return (
     <div className="app">
       <header className="header">
-        <span className="header-title">
-          <span>Claude</span> Chat
-        </span>
+        <div className="header-logo">
+          <div className="header-logo-icon">✦</div>
+          <span className="header-title">Claude Chat</span>
+        </div>
         <ModelSelector
           value={selectedModel}
           onChange={setSelectedModel}
@@ -106,11 +112,14 @@ export default function App() {
         />
         <div className="header-spacer" />
         <button className="header-key-btn" onClick={handleClearKey}>
-          Change API Key
+          API Key
         </button>
       </header>
 
-      <MessageList messages={messages} />
+      <MessageList
+        messages={messages}
+        onSuggestion={handleSuggestion}
+      />
 
       <ChatInput
         onSend={handleSend}

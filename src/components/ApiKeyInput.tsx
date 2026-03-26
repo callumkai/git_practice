@@ -12,43 +12,43 @@ export default function ApiKeyInput({ onSave }: Props) {
   function handleSave() {
     const trimmed = key.trim()
     if (!trimmed.startsWith('sk-ant-')) {
-      setError('Key must start with "sk-ant-". Get a key from console.anthropic.com.')
+      setError('Key must start with "sk-ant-". Get yours at console.anthropic.com.')
       return
     }
     setError('')
     onSave(trimmed)
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Enter') handleSave()
-  }
-
   return (
     <div className="apikey-screen">
       <div className="apikey-card">
-        <span className="apikey-icon">🤖</span>
-        <h1>Claude Chat</h1>
+        <div className="apikey-brand">
+          <div className="apikey-brand-icon">✦</div>
+          <span className="apikey-brand-name">Claude Chat</span>
+        </div>
+
+        <h2>Connect your API key</h2>
         <p>
-          Enter your Anthropic API key to start chatting. Your key is stored
-          only in your browser&apos;s localStorage and sent directly to
-          api.anthropic.com — never to any intermediate server.
+          Your key is stored locally in your browser and sent directly to
+          Anthropic — never to any other server.
         </p>
 
-        <label className="apikey-label">API Key</label>
+        <label className="apikey-label">Anthropic API Key</label>
         <div className="apikey-input-row">
           <input
             type={show ? 'text' : 'password'}
             placeholder="sk-ant-..."
             value={key}
             onChange={(e) => setKey(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => e.key === 'Enter' && handleSave()}
             autoFocus
+            autoComplete="off"
           />
           <button
             className="apikey-toggle"
             onClick={() => setShow((v) => !v)}
             type="button"
-            title={show ? 'Hide key' : 'Show key'}
+            title={show ? 'Hide' : 'Show'}
           >
             {show ? '🙈' : '👁'}
           </button>
@@ -57,16 +57,15 @@ export default function ApiKeyInput({ onSave }: Props) {
         {error && <div className="apikey-error">{error}</div>}
 
         <button className="apikey-save-btn" onClick={handleSave}>
-          Save &amp; Continue
+          Continue
         </button>
 
         <p className="apikey-footer">
-          Don&apos;t have a key?{' '}
           <a href="https://console.anthropic.com" target="_blank" rel="noreferrer">
-            Get one at console.anthropic.com
+            Get an API key →
           </a>
           <br />
-          ⚠️ Do not use this app on a shared or untrusted computer.
+          Do not use on a shared device.
         </p>
       </div>
     </div>

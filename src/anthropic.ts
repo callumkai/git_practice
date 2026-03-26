@@ -28,23 +28,20 @@ export async function streamMessage({
   })
 
   try {
-    const stream = client.messages.stream({
-      model,
-      max_tokens: 8192,
-      messages: messages.map((m) => ({ role: m.role, content: m.content })),
+    const stream = client.messages.stream(
+      {
+        model,
+        max_tokens: 8192,
+        messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      },
+      { signal },
+    )
+
+    stream.on('text', (text) => {
+      if (!signal.aborted) onToken(text)
     })
 
-    signal.addEventListener('abort', () => stream.abort(), { once: true })
-
-    for await (const event of stream) {
-      if (signal.aborted) break
-      if (
-        event.type === 'content_block_delta' &&
-        event.delta.type === 'text_delta'
-      ) {
-        onToken(event.delta.text)
-      }
-    }
+    await stream.finalMessage()
 
     if (!signal.aborted) {
       onDone()
