@@ -76,45 +76,47 @@ export default function App() {
         : m.content,
     }))
 
-    await streamMessage({
-      apiKey,
-      model: selectedModel,
-      messages: apiMessages,
-      webSearch,
-      onToken: (token) => {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, content: m.content + token } : m,
-          ),
-        )
-      },
-      onSearching: () => {
-        // Keep isSearching true - it's already true, this is just a signal
-        // that searching is actively happening
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, isSearching: true } : m,
-          ),
-        )
-      },
-      onDone: () => {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, isStreaming: false, isSearching: false } : m,
-          ),
-        )
-        setIsLoading(false)
-      },
-      onError: (error) => {
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === assistantId ? { ...m, isStreaming: false, isSearching: false, error } : m,
-          ),
-        )
-        setIsLoading(false)
-      },
-      signal: controller.signal,
-    })
+    const finalize = (error?: string) => {
+      setMessages((prev) =>
+        prev.map((m) =>
+          m.id === assistantId
+            ? { ...m, isStreaming: false, isSearching: false, ...(error ? { error } : {}) }
+            : m,
+        ),
+      )
+      setIsLoading(false)
+    }
+
+    try {
+      await streamMessage({
+        apiKey,
+        model: selectedModel,
+        messages: apiMessages,
+        webSearch,
+        onToken: (token) => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId ? { ...m, content: m.content + token } : m,
+            ),
+          )
+        },
+        onSearching: () => {
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === assistantId ? { ...m, isSearching: true } : m,
+            ),
+          )
+        },
+        onDone: () => finalize(),
+        onError: (error) => finalize(error),
+        signal: controller.signal,
+      })
+    } catch (err) {
+      // Safety net: should not reach here since streamMessage handles all errors
+      if (!controller.signal.aborted) {
+        finalize(err instanceof Error ? err.message : 'Unexpected error')
+      }
+    }
   }
 
   if (!apiKey) return <ApiKeyInput onSave={handleSaveKey} />
