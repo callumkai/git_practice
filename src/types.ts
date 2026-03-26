@@ -17,6 +17,16 @@ export const MODELS: ModelOption[] = [
 
 export type MessageRole = 'user' | 'assistant'
 
+export interface Attachment {
+  id: string
+  name: string
+  kind: 'image' | 'pdf' | 'text'
+  mimeType: string
+  dataUrl: string   // full data URL for display (data:image/jpeg;base64,...)
+  base64: string    // raw base64 without the data URL prefix, for API
+  size: number      // file size in bytes
+}
+
 export interface Message {
   id: string
   role: MessageRole
@@ -25,4 +35,6 @@ export interface Message {
   model?: ModelId
   error?: string
   timestamp: number
+  attachments?: Attachment[]
+  isSearching?: boolean  // true while web search is in progress
 }

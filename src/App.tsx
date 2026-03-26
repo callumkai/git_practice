@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import type { Message, ModelId } from './types'
-import { streamMessage } from './anthropic'
+import type { Message, ModelId, Attachment } from './types'
+import { streamMessage, buildApiContent } from './anthropic'
 import ApiKeyInput from './components/ApiKeyInput'
 import ModelSelector from './components/ModelSelector'
 import MessageList from './components/MessageList'
@@ -13,6 +13,7 @@ export default function App() {
   const [selectedModel, setSelectedModel] = useState<ModelId>('claude-opus-4-6')
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [webSearch, setWebSearch] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
 
   function handleSaveKey(key: string) {
@@ -30,15 +31,15 @@ export default function App() {
     abortRef.current?.abort()
     setIsLoading(false)
     setMessages((prev) =>
-      prev.map((m) => (m.isStreaming ? { ...m, isStreaming: false } : m)),
+      prev.map((m) => (m.isStreaming ? { ...m, isStreaming: false, isSearching: false } : m)),
     )
   }
 
   function handleSuggestion(text: string) {
-    handleSend(text)
+    handleSend(text, [])
   }
 
-  async function handleSend(text: string) {
+  async function handleSend(text: string, attachments: Attachment[]) {
     if (isLoading) return
 
     const userMsg: Message = {
@@ -47,6 +48,7 @@ export default function App() {
       content: text,
       isStreaming: false,
       timestamp: Date.now(),
+      attachments: attachments.length > 0 ? attachments : undefined,
     }
     const assistantId = crypto.randomUUID()
     const assistantMsg: Message = {
@@ -56,6 +58,7 @@ export default function App() {
       isStreaming: true,
       model: selectedModel,
       timestamp: Date.now(),
+      isSearching: webSearch,
     }
 
     const history = [...messages, userMsg]
@@ -65,10 +68,19 @@ export default function App() {
     const controller = new AbortController()
     abortRef.current = controller
 
+    // Build API messages from history
+    const apiMessages = history.map((m) => ({
+      role: m.role,
+      content: m.role === 'user'
+        ? buildApiContent(m.content, m.attachments)
+        : m.content,
+    }))
+
     await streamMessage({
       apiKey,
       model: selectedModel,
-      messages: history.map((m) => ({ role: m.role, content: m.content })),
+      messages: apiMessages,
+      webSearch,
       onToken: (token) => {
         setMessages((prev) =>
           prev.map((m) =>
@@ -76,10 +88,19 @@ export default function App() {
           ),
         )
       },
+      onSearching: () => {
+        // Keep isSearching true - it's already true, this is just a signal
+        // that searching is actively happening
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === assistantId ? { ...m, isSearching: true } : m,
+          ),
+        )
+      },
       onDone: () => {
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantId ? { ...m, isStreaming: false } : m,
+            m.id === assistantId ? { ...m, isStreaming: false, isSearching: false } : m,
           ),
         )
         setIsLoading(false)
@@ -87,7 +108,7 @@ export default function App() {
       onError: (error) => {
         setMessages((prev) =>
           prev.map((m) =>
-            m.id === assistantId ? { ...m, isStreaming: false, error } : m,
+            m.id === assistantId ? { ...m, isStreaming: false, isSearching: false, error } : m,
           ),
         )
         setIsLoading(false)
@@ -125,6 +146,8 @@ export default function App() {
         onSend={handleSend}
         isLoading={isLoading}
         onStop={handleStop}
+        webSearch={webSearch}
+        onWebSearchToggle={() => setWebSearch((v) => !v)}
       />
     </div>
   )
