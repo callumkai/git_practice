@@ -5,15 +5,22 @@ import ApiKeyInput from './components/ApiKeyInput'
 import ModelSelector from './components/ModelSelector'
 import MessageList from './components/MessageList'
 import ChatInput from './components/ChatInput'
+import SettingsPanel from './components/SettingsPanel'
 
 export default function App() {
   const [apiKey, setApiKey] = useState<string>(
     () => localStorage.getItem('anthropic_api_key') ?? '',
   )
-  const [selectedModel, setSelectedModel] = useState<ModelId>('claude-opus-4-6')
+  const [selectedModel, setSelectedModel] = useState<ModelId>(
+    () => (localStorage.getItem('default_model') as ModelId | null) ?? 'claude-opus-4-6',
+  )
+  const [systemPrompt, setSystemPrompt] = useState<string>(
+    () => localStorage.getItem('system_prompt') ?? '',
+  )
   const [messages, setMessages] = useState<Message[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [webSearch, setWebSearch] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const abortRef = useRef<AbortController | null>(null)
 
   function handleSaveKey(key: string) {
@@ -21,10 +28,20 @@ export default function App() {
     setApiKey(key)
   }
 
-  function handleClearKey() {
+  function handleDeleteKey() {
     localStorage.removeItem('anthropic_api_key')
     setApiKey('')
     setMessages([])
+  }
+
+  function handleDefaultModelChange(m: ModelId) {
+    localStorage.setItem('default_model', m)
+    setSelectedModel(m)
+  }
+
+  function handleSystemPromptChange(prompt: string) {
+    localStorage.setItem('system_prompt', prompt)
+    setSystemPrompt(prompt)
   }
 
   function handleStop() {
@@ -68,7 +85,6 @@ export default function App() {
     const controller = new AbortController()
     abortRef.current = controller
 
-    // Build API messages from history
     const apiMessages = history.map((m) => ({
       role: m.role,
       content: m.role === 'user'
@@ -91,6 +107,7 @@ export default function App() {
       await streamMessage({
         apiKey,
         model: selectedModel,
+        systemPrompt: systemPrompt || undefined,
         messages: apiMessages,
         webSearch,
         onToken: (token) => {
@@ -112,7 +129,6 @@ export default function App() {
         signal: controller.signal,
       })
     } catch (err) {
-      // Safety net: should not reach here since streamMessage handles all errors
       if (!controller.signal.aborted) {
         finalize(err instanceof Error ? err.message : 'Unexpected error')
       }
@@ -134,8 +150,16 @@ export default function App() {
           disabled={isLoading}
         />
         <div className="header-spacer" />
-        <button className="header-key-btn" onClick={handleClearKey}>
-          API Key
+        <button
+          className="header-menu-btn"
+          onClick={() => setSettingsOpen(true)}
+          title="Settings"
+          aria-label="Open settings"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+            <circle cx="9" cy="9" r="2.2" />
+            <path d="M9 1.5v1.8M9 14.7v1.8M1.5 9h1.8M14.7 9h1.8M3.6 3.6l1.27 1.27M13.13 13.13l1.27 1.27M14.4 3.6l-1.27 1.27M4.87 13.13l-1.27 1.27" />
+          </svg>
         </button>
       </header>
 
@@ -150,6 +174,19 @@ export default function App() {
         onStop={handleStop}
         webSearch={webSearch}
         onWebSearchToggle={() => setWebSearch((v) => !v)}
+      />
+
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        apiKey={apiKey}
+        onSaveKey={handleSaveKey}
+        onDeleteKey={handleDeleteKey}
+        systemPrompt={systemPrompt}
+        onSystemPromptChange={handleSystemPromptChange}
+        defaultModel={selectedModel}
+        onDefaultModelChange={handleDefaultModelChange}
+        onClearMessages={() => setMessages([])}
       />
     </div>
   )

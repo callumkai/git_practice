@@ -18,6 +18,7 @@ export interface ApiMessage {
 interface StreamMessageParams {
   apiKey: string
   model: ModelId
+  systemPrompt?: string
   messages: ApiMessage[]
   webSearch: boolean
   onToken: (token: string) => void
@@ -82,7 +83,7 @@ async function streamWithSSE(p: StreamMessageParams): Promise<void> {
   const res = await fetch(API_URL, {
     method: 'POST',
     headers: makeHeaders(p.apiKey),
-    body: JSON.stringify({ model: p.model, max_tokens: 8192, stream: true, messages: p.messages }),
+    body: JSON.stringify({ model: p.model, max_tokens: 8192, stream: true, messages: p.messages, ...(p.systemPrompt ? { system: p.systemPrompt } : {}) }),
     signal: p.signal,
   })
 
@@ -162,6 +163,7 @@ async function streamWithWebSearch(p: StreamMessageParams): Promise<void> {
         stream: false,
         tools: [{ type: 'web_search_20260209', name: 'web_search' }],
         messages: working,
+        ...(p.systemPrompt ? { system: p.systemPrompt } : {}),
       }),
       signal: p.signal,
     })
