@@ -21,7 +21,15 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [webSearch, setWebSearch] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [errorBanner, setErrorBanner] = useState<string | null>(null)
   const abortRef = useRef<AbortController | null>(null)
+  const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function showError(msg: string) {
+    if (errorTimerRef.current) clearTimeout(errorTimerRef.current)
+    setErrorBanner(msg)
+    errorTimerRef.current = setTimeout(() => setErrorBanner(null), 8000)
+  }
 
   function handleSaveKey(key: string) {
     localStorage.setItem('anthropic_api_key', key)
@@ -101,6 +109,7 @@ export default function App() {
         ),
       )
       setIsLoading(false)
+      if (error) showError(error)
     }
 
     try {
@@ -162,6 +171,18 @@ export default function App() {
           </svg>
         </button>
       </header>
+
+      {/* Error banner — shown whenever an API error occurs */}
+      {errorBanner && (
+        <div className="error-banner" role="alert">
+          <span className="error-banner-icon">⚠️</span>
+          <span className="error-banner-msg">{errorBanner}</span>
+          <button className="error-banner-close" onClick={() => setErrorBanner(null)} title="Dismiss">✕</button>
+        </div>
+      )}
+
+      {/* Loading progress bar */}
+      {isLoading && <div className="progress-bar" />}
 
       <MessageList
         messages={messages}

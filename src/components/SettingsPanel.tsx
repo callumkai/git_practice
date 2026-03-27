@@ -4,6 +4,8 @@ import type { ModelId } from '../types'
 
 export const APP_VERSION = '1.2.0'
 
+const API_URL = 'https://api.anthropic.com/v1/messages'
+
 interface Props {
   open: boolean
   onClose: () => void
@@ -36,6 +38,10 @@ export default function SettingsPanel({
   const [promptDraft, setPromptDraft] = useState(systemPrompt)
   const [promptSaved, setPromptSaved] = useState(false)
 
+  // Test connection state
+  const [testStatus, setTestStatus] = useState<'idle' | 'testing' | 'ok' | 'fail'>('idle')
+  const [testDetail, setTestDetail] = useState('')
+
   function maskedKey() {
     if (!apiKey) return '—'
     return apiKey.slice(0, 10) + '••••••••••••' + apiKey.slice(-4)
@@ -57,12 +63,58 @@ export default function SettingsPanel({
     onSaveKey(trimmed)
     setEditingKey(false)
     setKeyError('')
+    // Re-test after saving
+    setTestStatus('idle')
+    setTestDetail('')
   }
 
   function savePrompt() {
     onSystemPromptChange(promptDraft)
     setPromptSaved(true)
     setTimeout(() => setPromptSaved(false), 1800)
+  }
+
+  async function testConnection() {
+    setTestStatus('testing')
+    setTestDetail('')
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-allow-browser': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 5,
+          messages: [{ role: 'user', content: 'Hi' }],
+        }),
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const body: any = await res.json().catch(() => ({}))
+      if (res.ok) {
+        setTestStatus('ok')
+        setTestDetail('API key is valid and working.')
+      } else {
+        setTestStatus('fail')
+        const msg = body?.error?.message ?? `HTTP ${res.status}`
+        if (res.status === 401) setTestDetail('Invalid API key. Please update it.')
+        else if (res.status === 403) setTestDetail(`Access denied: ${msg}`)
+        else if (res.status === 404) setTestDetail(`Model not found: ${msg}`)
+        else if (res.status === 429) setTestDetail('Rate limit hit — try again shortly.')
+        else setTestDetail(`Error ${res.status}: ${msg}`)
+      }
+    } catch (err) {
+      setTestStatus('fail')
+      const msg = err instanceof Error ? err.message : String(err)
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError')) {
+        setTestDetail('Network error — check your internet connection. (CORS may also be blocking the request in some browsers.)')
+      } else {
+        setTestDetail(msg)
+      }
+    }
   }
 
   function confirmClear() {
@@ -81,10 +133,8 @@ export default function SettingsPanel({
 
   return (
     <>
-      {/* Backdrop */}
       {open && <div className="settings-backdrop" onClick={onClose} />}
 
-      {/* Drawer */}
       <div className={`settings-drawer${open ? ' open' : ''}`}>
         <div className="settings-header">
           <span className="settings-title">Settings</span>
@@ -107,7 +157,7 @@ export default function SettingsPanel({
               </div>
             </div>
             <p className="settings-about-desc">
-              Powered by Anthropic. Your API key is stored locally and sent directly to Anthropic — never to any other server.
+              Powered by Anthropic. Your key is stored locally and sent directly to Anthropic — never to any other server.
             </p>
           </section>
 
@@ -152,6 +202,27 @@ export default function SettingsPanel({
               Get your key at{' '}
               <a href="https://console.anthropic.com" target="_blank" rel="noreferrer">console.anthropic.com</a>
             </p>
+          </section>
+
+          {/* ── Test Connection ────────────────────────────── */}
+          <section className="settings-section">
+            <div className="settings-section-title">Connection</div>
+            <p className="settings-help" style={{ marginBottom: 10 }}>
+              Send a test request to verify your key and network connection.
+            </p>
+            <button
+              className="settings-btn primary"
+              onClick={testConnection}
+              disabled={testStatus === 'testing'}
+            >
+              {testStatus === 'testing' ? 'Testing…' : 'Test API Key'}
+            </button>
+            {testStatus === 'ok' && (
+              <div className="settings-test-result ok">✓ {testDetail}</div>
+            )}
+            {testStatus === 'fail' && (
+              <div className="settings-test-result fail">✗ {testDetail}</div>
+            )}
           </section>
 
           {/* ── Default Model ─────────────────────────────── */}
