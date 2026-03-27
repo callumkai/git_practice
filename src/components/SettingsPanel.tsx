@@ -4,7 +4,7 @@ import type { ModelId } from '../types'
 
 export const APP_VERSION = '1.2.0'
 
-const API_URL = 'https://api.anthropic.com/v1/messages'
+const API_URL = '/api/messages'
 
 interface Props {
   open: boolean
@@ -83,8 +83,6 @@ export default function SettingsPanel({
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-allow-browser': 'true',
         },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',

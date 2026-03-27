@@ -1,6 +1,6 @@
 import type { ModelId, Attachment } from './types'
 
-const API_URL = 'https://api.anthropic.com/v1/messages'
+const API_URL = '/api/messages'
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -58,8 +58,7 @@ function makeHeaders(apiKey: string): Record<string, string> {
   return {
     'Content-Type': 'application/json',
     'x-api-key': apiKey,
-    'anthropic-version': '2023-06-01',
-    'anthropic-dangerous-allow-browser': 'true',
+    // anthropic-version is added by the backend proxy, not needed here
   }
 }
 
