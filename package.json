@@ -3,7 +3,7 @@
   "version": "1.2.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -n backend,frontend -c magenta,cyan \"node server.js\" \"vite\"",
+    "dev": "concurrently -n backend,frontend -c magenta,cyan \"node server.js\" \"vite\"",
     "build": "tsc && vite build",
     "start": "node server.js",
     "preview": "vite preview"
