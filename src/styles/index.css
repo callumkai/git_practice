@@ -723,6 +723,22 @@ input, textarea { font-family: inherit; -webkit-tap-highlight-color: transparent
   .settings-drawer { width: 100%; }
 }
 
+/* ─── Header hamburger button ────────────────────────────────────────── */
+.header-hamburger {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+  margin-right: 2px;
+}
+.header-hamburger:hover { background: var(--fill-2); color: var(--text-primary); }
+.header-hamburger:active { background: var(--fill-3); }
+
 /* ─── Header menu button ─────────────────────────────────────────────── */
 .header-menu-btn {
   width: 34px;
@@ -1024,3 +1040,138 @@ input, textarea { font-family: inherit; -webkit-tap-highlight-color: transparent
   color: #ff6b63;
   border: 0.5px solid rgba(255, 69, 58, 0.3);
 }
+
+/* ─── Sidebar backdrop ───────────────────────────────────────────────── */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 40;
+  animation: fadeIn 0.2s var(--ease);
+}
+
+/* ─── Sidebar drawer ─────────────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  background: var(--bg-1);
+  border-right: 0.5px solid var(--separator);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.28s var(--ease);
+}
+.sidebar.open { transform: translateX(0); }
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 14px 12px;
+  border-bottom: 0.5px solid var(--separator);
+  flex-shrink: 0;
+}
+.sidebar-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text-primary);
+}
+.sidebar-close {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: var(--fill-1);
+  transition: background 0.15s;
+}
+.sidebar-close:hover { background: var(--fill-3); color: var(--text-primary); }
+
+/* ─── New Chat button ────────────────────────────────────────────────── */
+.sidebar-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 10px 6px;
+  padding: 10px 14px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+.sidebar-new-btn:hover { background: var(--blue-dk); }
+.sidebar-new-btn:active { transform: scale(0.97); }
+
+/* ─── Conversation list ──────────────────────────────────────────────── */
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 6px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+.sidebar-list::-webkit-scrollbar { display: none; }
+
+.sidebar-empty {
+  padding: 20px 10px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.sidebar-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 9px 36px 9px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: background 0.12s;
+  min-width: 0;
+}
+.sidebar-item:hover { background: var(--fill-1); }
+.sidebar-item.active { background: rgba(10, 132, 255, 0.1); }
+.sidebar-item.active .sidebar-item-title { color: var(--blue); }
+
+.sidebar-item-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sidebar-item-time {
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.sidebar-item-delete {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+.sidebar-item:hover .sidebar-item-delete { opacity: 1; }
+.sidebar-item-delete:hover { color: var(--error-red); background: var(--error-bg); }

@@ -10,9 +10,9 @@ export interface ModelOption {
 }
 
 export const MODELS: ModelOption[] = [
-  { id: 'claude-opus-4-6', label: 'Claude Opus 4.6', description: 'Most capable' },
-  { id: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', description: 'Balanced' },
-  { id: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5', description: 'Fastest' },
+  { id: 'claude-opus-4-6',          label: 'Claude Opus 4.6',   description: 'Most capable' },
+  { id: 'claude-sonnet-4-6',        label: 'Claude Sonnet 4.6', description: 'Balanced' },
+  { id: 'claude-haiku-4-5-20251001',label: 'Claude Haiku 4.5',  description: 'Fastest' },
 ]
 
 export type MessageRole = 'user' | 'assistant'
@@ -22,9 +22,9 @@ export interface Attachment {
   name: string
   kind: 'image' | 'pdf' | 'text'
   mimeType: string
-  dataUrl: string   // full data URL for display (data:image/jpeg;base64,...)
-  base64: string    // raw base64 without the data URL prefix, for API
-  size: number      // file size in bytes
+  dataUrl: string
+  base64: string
+  size: number
 }
 
 export interface Message {
@@ -36,5 +36,13 @@ export interface Message {
   error?: string
   timestamp: number
   attachments?: Attachment[]
-  isSearching?: boolean  // true while web search is in progress
+  isSearching?: boolean
+}
+
+export interface Conversation {
+  id: string
+  title: string
+  createdAt: number
+  updatedAt: number
+  messages?: Message[]
 }

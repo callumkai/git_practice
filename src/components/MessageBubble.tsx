@@ -1,7 +1,7 @@
 import { MODELS } from '../types'
 import type { Message } from '../types'
 
-// ─── HTML helpers ────────────────────────────────────────────────────────────
+// ─── HTML helpers ─────────────────────────────────────────────────────────────
 
 function escapeHtml(s: string): string {
   return s
@@ -11,9 +11,7 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;')
 }
 
-// ─── Markdown renderer (no external deps) ────────────────────────────────────
-// Extracts code blocks first (to preserve verbatim content), HTML-escapes
-// the rest, then applies markdown transforms.
+// ─── Markdown renderer (no external deps) ─────────────────────────────────────
 
 function renderMarkdown(raw: string): string {
   if (!raw) return ''
@@ -34,7 +32,7 @@ function renderMarkdown(raw: string): string {
     return `\x02IC${inlineCodes.length - 1}\x03`
   })
 
-  // 3. HTML-escape remaining text (safe to insert HTML tags after this)
+  // 3. HTML-escape remaining text
   text = escapeHtml(text)
 
   // 4. Markdown transforms
@@ -50,12 +48,9 @@ function renderMarkdown(raw: string): string {
     .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
     .replace(/^[*\-] (.+)$/gm, '<li>$1</li>')
     .replace(/^---+$/gm, '<hr>')
-    // Markdown links [text](url) — url was already escaped so (&amp; etc are fine)
     .replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\n]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
-    // Bare URLs
     .replace(/(^|[\s(])(https?:\/\/[^\s<&"')\]]+)/g, '$1<a href="$2" target="_blank" rel="noreferrer">$2</a>')
     .replace(/\n/g, '<br>')
-    // Tidy <br> around block elements
     .replace(/<br>(<\/(pre|h[1-3]|li|blockquote|hr)>)/g, '$1')
     .replace(/(<(pre|h[1-3]|li|blockquote)>)<br>/g, '$1')
 
@@ -66,7 +61,7 @@ function renderMarkdown(raw: string): string {
   return text
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function relativeTime(ts: number): string {
   const diff = Math.floor((Date.now() - ts) / 1000)
@@ -80,24 +75,28 @@ function modelLabel(id: string): string {
   return MODELS.find((m) => m.id === id)?.label.replace('Claude ', '') ?? id
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// ─── Component ────────────────────────────────────────────────────────────────
 
-interface Props {
-  message: Message
-}
+interface Props { message: Message }
 
 export default function MessageBubble({ message }: Props) {
   const isUser = message.role === 'user'
   const isError = Boolean(message.error)
+  const content = message.content ?? ''
   const imageAttachments = message.attachments?.filter((a) => a.kind === 'image') ?? []
-  const fileAttachments = message.attachments?.filter((a) => a.kind !== 'image') ?? []
+  const fileAttachments  = message.attachments?.filter((a) => a.kind !== 'image') ?? []
 
   function assistantHtml(): string {
-    if (message.isSearching && !message.content) {
-      return '<span class="searching-indicator">Searching the web<span class="searching-dots"></span></span>'
+    try {
+      if (message.isSearching && !content) {
+        return '<span class="searching-indicator">Searching the web<span class="searching-dots"></span></span>'
+      }
+      const md = renderMarkdown(content)
+      return message.isStreaming ? md + '<span class="cursor"></span>' : md
+    } catch {
+      // Fallback: render plain escaped text if markdown crashes
+      return escapeHtml(content) + (message.isStreaming ? '<span class="cursor"></span>' : '')
     }
-    const md = renderMarkdown(message.content)
-    return message.isStreaming ? md + '<span class="cursor"></span>' : md
   }
 
   return (
@@ -121,7 +120,7 @@ export default function MessageBubble({ message }: Props) {
       {isError ? (
         <div className="bubble error">⚠️ {message.error}</div>
       ) : isUser ? (
-        <div className="bubble">{message.content || <span style={{ opacity: 0.4 }}>(empty)</span>}</div>
+        <div className="bubble">{content || <span style={{ opacity: 0.4 }}>(empty)</span>}</div>
       ) : (
         <div
           className="bubble"
