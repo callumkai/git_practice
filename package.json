@@ -1,0 +1,32 @@
+{
+  "name": "claude-chat",
+  "version": "1.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c magenta,cyan \"node server.js\" \"vite\"",
+    "build": "tsc && vite build",
+    "start": "node server.js",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:45769/git/callumkai/git_practice"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.0.0",
+    "typescript": "^6.0.2",
+    "vite": "^8.0.3"
+  }
+}
