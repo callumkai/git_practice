@@ -162,34 +162,34 @@ export function RoomCanvas({ room, highlightRuns = [], onSvgReady }: RoomCanvasP
     <div className="flex flex-col gap-2 h-full">
       <div className="flex flex-wrap items-center gap-2 px-1">
         <button
-          className="px-2 py-1 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10"
+          className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 disabled:opacity-40"
           onClick={() => selectedItem && rotateItem(room.id, selectedItem.id, selectedItem.rotation - 15)}
           disabled={!selectedItem}
         >
           ⟲ 15°
         </button>
         <button
-          className="px-2 py-1 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10"
+          className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 disabled:opacity-40"
           onClick={() => selectedItem && rotateItem(room.id, selectedItem.id, selectedItem.rotation + 15)}
           disabled={!selectedItem}
         >
           15° ⟳
         </button>
         <button
-          className="px-2 py-1 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10"
+          className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 disabled:opacity-40"
           onClick={() => selectedItem && rotateItem(room.id, selectedItem.id, Math.round(selectedItem.rotation / 90) * 90)}
           disabled={!selectedItem}
         >
           Snap 90°
         </button>
         <button
-          className="px-2 py-1 text-sm rounded bg-red-600/10 text-red-700 dark:text-red-300 hover:bg-red-600/20"
+          className="min-h-11 px-3 py-2 text-sm rounded bg-red-600/10 text-red-700 dark:text-red-300 hover:bg-red-600/20 disabled:opacity-40"
           onClick={() => selectedItem && removeItem(room.id, selectedItem.id)}
           disabled={!selectedItem}
         >
           Delete
         </button>
-        <button className="ml-auto px-2 py-1 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={resetView}>
+        <button className="ml-auto min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={resetView}>
           Reset view
         </button>
       </div>
@@ -197,7 +197,7 @@ export function RoomCanvas({ room, highlightRuns = [], onSvgReady }: RoomCanvasP
       <svg
         ref={svgRef}
         viewBox={viewBoxAttr}
-        className="flex-1 w-full min-h-[320px] rounded-lg bg-paper touch-none select-none"
+        className="flex-1 w-full min-h-[200px] lg:min-h-[320px] rounded-lg bg-paper touch-none select-none"
         onPointerDown={handlers.onPointerDown}
         onPointerMove={onSvgPointerMove}
         onPointerUp={onSvgPointerUp}

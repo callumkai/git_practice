@@ -65,7 +65,7 @@ export default function App() {
           {(['ground', 'first'] as FloorId[]).map((f) => (
             <button
               key={f}
-              className={`text-xs px-2 py-1 rounded capitalize ${floor === f && !roomId ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
+              className={`min-h-10 px-3 py-2 text-xs rounded capitalize ${floor === f && !roomId ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
               onClick={() => {
                 setFloor(f)
               }}
@@ -75,17 +75,17 @@ export default function App() {
           ))}
         </div>
         <div className="ml-auto flex gap-1">
-          <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onExport}>
+          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onExport}>
             Export JSON
           </button>
-          <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onImportClick}>
+          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onImportClick}>
             Import JSON
           </button>
           <input ref={fileInputRef} type="file" accept="application/json" className="hidden" onChange={onFileSelected} />
         </div>
       </header>
 
-      <main className="flex-1 p-3 min-h-0">
+      <main className="flex-1 p-3 min-h-0 overflow-y-auto">
         {roomId ? <RoomView roomId={roomId} onBack={() => setRoom(null)} /> : <FloorOverview floor={floor} onSelectRoom={setRoom} />}
       </main>
     </div>

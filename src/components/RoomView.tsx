@@ -54,44 +54,47 @@ export function RoomView({ roomId, onBack }: RoomViewProps) {
   const roomCenter = { x: room.rect.x + room.rect.w / 2, y: room.rect.y + room.rect.h / 2 }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-3 h-full">
-      <div className="flex-1 flex flex-col gap-2 min-h-[50vh]">
-        <div className="flex items-center gap-2 px-1">
-          <button className="text-sm px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onBack}>
+    // Mobile: each panel gets its own deterministic size and the page scrolls
+    // past whatever doesn't fit. Desktop (lg:): canvas and side panel share
+    // one viewport-height row via flex-1, same as before.
+    <div className="flex flex-col lg:flex-row gap-3 lg:h-full">
+      <div className="flex flex-col gap-2 lg:flex-1 lg:min-h-0">
+        <div className="flex flex-wrap items-center gap-2 px-1">
+          <button className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onBack}>
             ← Floor
           </button>
           <h2 className="font-medium">{room.name}</h2>
           <span className="text-xs opacity-60 truncate">{layout?.name}</span>
           <div className="ml-auto flex items-center gap-1">
-            <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canUndo} onClick={undo}>
+            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canUndo} onClick={undo}>
               ↶ Undo
             </button>
-            <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canRedo} onClick={redo}>
+            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canRedo} onClick={redo}>
               ↷ Redo
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 px-1 text-xs">
-          <label className="flex items-center gap-1">
-            <input type="checkbox" checked={snapEnabled} onChange={(e) => setSnapEnabled(e.target.checked)} /> Snap
+        <div className="flex items-center gap-4 px-1 text-sm">
+          <label className="flex items-center gap-1.5 min-h-11">
+            <input type="checkbox" className="size-5" checked={snapEnabled} onChange={(e) => setSnapEnabled(e.target.checked)} /> Snap
           </label>
-          <label className="flex items-center gap-1">
-            <input type="checkbox" checked={showDimensions} onChange={(e) => setShowDimensions(e.target.checked)} /> Dimensions
+          <label className="flex items-center gap-1.5 min-h-11">
+            <input type="checkbox" className="size-5" checked={showDimensions} onChange={(e) => setShowDimensions(e.target.checked)} /> Dimensions
           </label>
         </div>
 
-        <div className="flex-1 min-h-0">
+        <div className="h-[52vh] lg:h-auto lg:flex-1 lg:min-h-0">
           <RoomCanvas key={room.id} room={room} highlightRuns={tab === 'tv' ? highlightRuns : []} onSvgReady={setSvg} />
         </div>
       </div>
 
-      <div className="lg:w-80 flex flex-col gap-2">
+      <div className="flex flex-col gap-2 lg:w-80">
         <div className="flex flex-wrap gap-1 border-b border-black/10 dark:border-white/10 pb-1">
           {TABS.map((t) => (
             <button
               key={t.id}
-              className={`text-xs px-2 py-1 rounded ${tab === t.id ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
+              className={`min-h-11 px-3 py-2 text-xs rounded ${tab === t.id ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
               onClick={() => setTab(t.id)}
             >
               {t.label}
@@ -99,7 +102,7 @@ export function RoomView({ roomId, onBack }: RoomViewProps) {
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto pr-1">
+        <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto pr-1">
           {tab === 'furniture' && <FurniturePalette roomId={room.id} roomCenter={roomCenter} />}
           {tab === 'layouts' && <LayoutManager roomId={room.id} onCompare={(a, b) => setCompare({ a, b })} />}
           {tab === 'clearance' && <ClearancePanel room={room} />}
