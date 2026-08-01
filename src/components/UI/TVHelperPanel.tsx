@@ -65,8 +65,31 @@ export function TVHelperPanel({ room, items, onHighlightRunsChange }: TVHelperPa
       <label className="text-xs flex flex-col gap-1">
         Screen size
         <div className="flex items-center gap-2">
-          <input type="range" min={32} max={85} value={inches} onChange={(e) => setInches(Number(e.target.value))} className="flex-1" />
-          <span className="w-16 text-right">{inches}"</span>
+          <button
+            type="button"
+            className="min-h-11 min-w-11 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 text-base leading-none"
+            onClick={() => setInches((v) => Math.max(32, v - 1))}
+            aria-label="Smaller screen"
+          >
+            −
+          </button>
+          <input
+            type="range"
+            min={32}
+            max={85}
+            value={inches}
+            onChange={(e) => setInches(Number(e.target.value))}
+            className="flex-1"
+          />
+          <button
+            type="button"
+            className="min-h-11 min-w-11 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 text-base leading-none"
+            onClick={() => setInches((v) => Math.min(85, v + 1))}
+            aria-label="Larger screen"
+          >
+            +
+          </button>
+          <span className="w-12 text-right shrink-0">{inches}"</span>
         </div>
       </label>
 

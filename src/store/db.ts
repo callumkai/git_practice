@@ -7,11 +7,11 @@ export class PlannerDb extends Dexie {
   customLibrary!: Table<FurnitureLibraryEntry, string>
 
   constructor() {
-    // Renamed (was 'mulberry-grove-planner') to force a fresh seed after the
-    // living-room presets were reworked — otherwise anyone who'd already
-    // opened the app would keep the old, broken presets forever, since the
-    // seed step only runs when no layouts exist yet for a room.
-    super('mulberry-grove-planner-v2')
+    // Bumped again (was 'mulberry-grove-planner-v2') — presets were replaced
+    // with the user's own 8-option set, so anyone on v2 needs a fresh seed
+    // too. See v2's comment: the seed step only runs when a room has no
+    // saved layouts yet, so a name bump is what actually forces it.
+    super('mulberry-grove-planner-v3')
     this.version(1).stores({
       layouts: 'id, roomId',
       houseSettings: 'id',

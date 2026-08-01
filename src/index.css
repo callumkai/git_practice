@@ -28,6 +28,42 @@ body {
   font-family: var(--font-sans);
 }
 
+/* Bigger touch target for range inputs — the default thumb is a few px and
+   easy for a real finger to miss entirely with no visible feedback. */
+input[type='range'] {
+  height: 32px;
+  cursor: pointer;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.15);
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  margin-top: -10px;
+  border-radius: 9999px;
+  background: #2b6cb0;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+input[type='range']::-moz-range-track {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.15);
+}
+input[type='range']::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #2b6cb0;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
 @media print {
   body * {
     visibility: hidden;
