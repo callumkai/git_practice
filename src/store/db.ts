@@ -7,7 +7,11 @@ export class PlannerDb extends Dexie {
   customLibrary!: Table<FurnitureLibraryEntry, string>
 
   constructor() {
-    super('mulberry-grove-planner')
+    // Renamed (was 'mulberry-grove-planner') to force a fresh seed after the
+    // living-room presets were reworked — otherwise anyone who'd already
+    // opened the app would keep the old, broken presets forever, since the
+    // seed step only runs when no layouts exist yet for a room.
+    super('mulberry-grove-planner-v2')
     this.version(1).stores({
       layouts: 'id, roomId',
       houseSettings: 'id',
