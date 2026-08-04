@@ -37,7 +37,7 @@ export function FloorOverview({ floor, onSelectRoom }: FloorOverviewProps) {
   return (
     <div className="flex flex-col gap-2 h-full">
       <div className="flex justify-end px-1">
-        <button className="px-2 py-1 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={resetView}>
+        <button className="px-2 py-1 text-sm rounded bg-black/5 hover:bg-black/10" onClick={resetView}>
           Reset view
         </button>
       </div>

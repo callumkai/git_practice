@@ -40,10 +40,10 @@ function MiniPlan({ room, layoutId }: { room: RoomDef; layoutId: string }) {
 export function CompareView({ room, layoutIdA, layoutIdB, onClose }: CompareViewProps) {
   return (
     <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4" onClick={onClose}>
-      <div className="bg-white dark:bg-neutral-900 rounded-xl p-4 max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-xl p-4 max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-3">
           <h2 className="font-medium">Compare layouts — {room.name}</h2>
-          <button className="text-sm px-2 py-1 rounded bg-black/5 dark:bg-white/10" onClick={onClose}>
+          <button className="text-sm px-2 py-1 rounded bg-black/5" onClick={onClose}>
             Close
           </button>
         </div>

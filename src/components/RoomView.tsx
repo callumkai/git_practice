@@ -60,16 +60,16 @@ export function RoomView({ roomId, onBack }: RoomViewProps) {
     <div className="flex flex-col lg:flex-row gap-3 lg:h-full">
       <div className="flex flex-col gap-2 lg:flex-1 lg:min-h-0">
         <div className="flex flex-wrap items-center gap-2 px-1">
-          <button className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onBack}>
+          <button className="min-h-11 px-3 py-2 text-sm rounded bg-black/5 hover:bg-black/10" onClick={onBack}>
             ← Floor
           </button>
           <h2 className="font-medium">{room.name}</h2>
           <span className="text-xs opacity-60 truncate">{layout?.name}</span>
           <div className="ml-auto flex items-center gap-1">
-            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canUndo} onClick={undo}>
+            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 disabled:opacity-30" disabled={!canUndo} onClick={undo}>
               ↶ Undo
             </button>
-            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 disabled:opacity-30" disabled={!canRedo} onClick={redo}>
+            <button className="min-h-11 px-3 py-2 text-xs rounded bg-black/5 disabled:opacity-30" disabled={!canRedo} onClick={redo}>
               ↷ Redo
             </button>
           </div>
@@ -90,11 +90,11 @@ export function RoomView({ roomId, onBack }: RoomViewProps) {
       </div>
 
       <div className="flex flex-col gap-2 lg:w-80">
-        <div className="flex flex-wrap gap-1 border-b border-black/10 dark:border-white/10 pb-1">
+        <div className="flex flex-wrap gap-1 border-b border-black/10 pb-1">
           {TABS.map((t) => (
             <button
               key={t.id}
-              className={`min-h-11 px-3 py-2 text-xs rounded ${tab === t.id ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
+              className={`min-h-11 px-3 py-2 text-xs rounded ${tab === t.id ? 'bg-blue-600 text-white' : 'bg-black/5 hover:bg-black/10'}`}
               onClick={() => setTab(t.id)}
             >
               {t.label}

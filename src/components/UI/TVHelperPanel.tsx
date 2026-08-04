@@ -67,7 +67,7 @@ export function TVHelperPanel({ room, items, onHighlightRunsChange }: TVHelperPa
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="min-h-11 min-w-11 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 text-base leading-none"
+            className="min-h-11 min-w-11 rounded bg-black/5 hover:bg-black/10 text-base leading-none"
             onClick={() => setInches((v) => Math.max(32, v - 1))}
             aria-label="Smaller screen"
           >
@@ -83,7 +83,7 @@ export function TVHelperPanel({ room, items, onHighlightRunsChange }: TVHelperPa
           />
           <button
             type="button"
-            className="min-h-11 min-w-11 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 text-base leading-none"
+            className="min-h-11 min-w-11 rounded bg-black/5 hover:bg-black/10 text-base leading-none"
             onClick={() => setInches((v) => Math.min(85, v + 1))}
             aria-label="Larger screen"
           >
@@ -99,7 +99,7 @@ export function TVHelperPanel({ room, items, onHighlightRunsChange }: TVHelperPa
 
       <div className="text-xs">
         {eligibleRuns.length === 0 ? (
-          <span className="text-red-700 dark:text-red-300">No wall run in this room is long enough for a {inches}" TV.</span>
+          <span className="text-red-700">No wall run in this room is long enough for a {inches}" TV.</span>
         ) : (
           <span>
             {eligibleRuns.length} wall run{eligibleRuns.length > 1 ? 's' : ''} highlighted on the plan can take it.

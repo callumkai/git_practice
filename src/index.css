@@ -2,9 +2,7 @@
 
 @theme {
   --color-paper: #f4ede1;
-  --color-paper-dark: #2a2420;
   --color-poche: #3d3630;
-  --color-poche-dark: #17130f;
   --color-floor: #c8a876;
   --color-floor-line: #b8975f;
   --color-upholstery-1: #8a9a8b;
@@ -16,7 +14,10 @@
 }
 
 :root {
-  color-scheme: light dark;
+  /* This app is one fixed warm-paper theme, not light/dark — forcing this
+     stops native form controls (selects, scrollbars) rendering in
+     OS-dark-mode style against a page that never gets a dark background. */
+  color-scheme: light;
 }
 
 html, body, #root {

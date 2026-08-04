@@ -58,14 +58,14 @@ export default function App() {
   }
 
   return (
-    <div className="h-svh flex flex-col bg-paper text-neutral-900 dark:text-neutral-100">
-      <header className="flex items-center gap-2 px-3 py-2 border-b border-black/10 dark:border-white/10">
+    <div className="h-svh flex flex-col bg-paper text-neutral-900">
+      <header className="flex items-center gap-2 px-3 py-2 border-b border-black/10">
         <h1 className="font-semibold text-sm sm:text-base">4 Mulberry Grove</h1>
         <div className="flex gap-1 ml-2">
           {(['ground', 'first'] as FloorId[]).map((f) => (
             <button
               key={f}
-              className={`min-h-10 px-3 py-2 text-xs rounded capitalize ${floor === f && !roomId ? 'bg-blue-600 text-white' : 'bg-black/5 dark:bg-white/10 hover:bg-black/10'}`}
+              className={`min-h-10 px-3 py-2 text-xs rounded capitalize ${floor === f && !roomId ? 'bg-blue-600 text-white' : 'bg-black/5 hover:bg-black/10'}`}
               onClick={() => {
                 setFloor(f)
               }}
@@ -75,10 +75,10 @@ export default function App() {
           ))}
         </div>
         <div className="ml-auto flex gap-1">
-          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onExport}>
+          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 hover:bg-black/10" onClick={onExport}>
             Export JSON
           </button>
-          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={onImportClick}>
+          <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 hover:bg-black/10" onClick={onImportClick}>
             Import JSON
           </button>
           <input ref={fileInputRef} type="file" accept="application/json" className="hidden" onChange={onFileSelected} />

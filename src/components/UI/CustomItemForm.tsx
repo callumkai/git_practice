@@ -30,7 +30,7 @@ export function CustomItemForm({ onCreate, onCancel }: CustomItemFormProps) {
 
   return (
     <form
-      className="flex flex-col gap-2 p-3 rounded border border-black/10 dark:border-white/15 bg-black/[0.02] dark:bg-white/5"
+      className="flex flex-col gap-2 p-3 rounded border border-black/10 bg-black/[0.02]"
       onSubmit={(e) => {
         e.preventDefault()
         if (!name.trim() || w <= 0 || d <= 0) return
@@ -70,7 +70,7 @@ export function CustomItemForm({ onCreate, onCancel }: CustomItemFormProps) {
         </select>
       </label>
       <div className="flex gap-2 justify-end mt-1">
-        <button type="button" className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10" onClick={onCancel}>
+        <button type="button" className="text-xs px-2 py-1 rounded bg-black/5" onClick={onCancel}>
           Cancel
         </button>
         <button type="submit" className="text-xs px-2 py-1 rounded bg-blue-600 text-white">

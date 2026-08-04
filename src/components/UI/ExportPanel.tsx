@@ -39,23 +39,23 @@ export function ExportPanel({ room, layoutName, items, svg }: ExportPanelProps) 
     <div className="flex flex-col gap-2 text-sm">
       <div className="flex flex-wrap gap-2">
         <button
-          className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 disabled:opacity-40"
+          className="text-xs px-2 py-1 rounded bg-black/5 hover:bg-black/10 disabled:opacity-40"
           disabled={!svg}
           onClick={() => svg && downloadSvg(svg, `${room.name}-${layoutName}.svg`)}
         >
           Export SVG
         </button>
         <button
-          className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10 disabled:opacity-40"
+          className="text-xs px-2 py-1 rounded bg-black/5 hover:bg-black/10 disabled:opacity-40"
           disabled={!svg}
           onClick={() => svg && downloadPng(svg, `${room.name}-${layoutName}.png`)}
         >
           Export PNG
         </button>
-        <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={handlePrint}>
+        <button className="text-xs px-2 py-1 rounded bg-black/5 hover:bg-black/10" onClick={handlePrint}>
           Print (1:50, A4)
         </button>
-        <button className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={() => setSummaryOpen((v) => !v)}>
+        <button className="text-xs px-2 py-1 rounded bg-black/5 hover:bg-black/10" onClick={() => setSummaryOpen((v) => !v)}>
           {summaryOpen ? 'Hide' : 'Shopping'} summary
         </button>
       </div>

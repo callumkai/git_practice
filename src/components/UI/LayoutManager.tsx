@@ -27,7 +27,7 @@ export function LayoutManager({ roomId, onCompare }: LayoutManagerProps) {
         {layouts.map((layout) => (
           <li
             key={layout.id}
-            className={`flex items-center gap-2 text-xs px-2 py-1.5 rounded ${layout.id === activeLayoutId ? 'bg-blue-600/10 font-medium' : 'hover:bg-black/5 dark:hover:bg-white/5'}`}
+            className={`flex items-center gap-2 text-xs px-2 py-1.5 rounded ${layout.id === activeLayoutId ? 'bg-blue-600/10 font-medium' : 'hover:bg-black/5'}`}
           >
             {editingId === layout.id ? (
               <input
@@ -92,7 +92,7 @@ export function LayoutManager({ roomId, onCompare }: LayoutManagerProps) {
       </form>
 
       {layouts.length > 1 && (
-        <div className="flex gap-1 items-center pt-1 border-t border-black/10 dark:border-white/10 mt-1">
+        <div className="flex gap-1 items-center pt-1 border-t border-black/10 mt-1">
           <select className="flex-1 text-xs border rounded px-2 py-1 bg-transparent" value={compareTarget} onChange={(e) => setCompareTarget(e.target.value)}>
             <option value="">Compare with...</option>
             {layouts
@@ -104,7 +104,7 @@ export function LayoutManager({ roomId, onCompare }: LayoutManagerProps) {
               ))}
           </select>
           <button
-            className="text-xs px-2 py-1 rounded bg-black/5 dark:bg-white/10 disabled:opacity-40"
+            className="text-xs px-2 py-1 rounded bg-black/5 disabled:opacity-40"
             disabled={!compareTarget || !activeLayoutId}
             onClick={() => activeLayoutId && compareTarget && onCompare(activeLayoutId, compareTarget)}
           >

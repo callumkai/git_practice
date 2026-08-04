@@ -49,7 +49,7 @@ export function HouseSettingsPanel({ currentRoomItems }: HouseSettingsPanelProps
         </div>
       </label>
 
-      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10 dark:border-white/10">
+      <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10">
         <label className="flex flex-col gap-1">
           Front door width
           <input
@@ -85,7 +85,7 @@ export function HouseSettingsPanel({ currentRoomItems }: HouseSettingsPanelProps
       {warnings.length > 0 && (
         <ul className="flex flex-col gap-1">
           {warnings.map((w, i) => (
-            <li key={i} className="px-2 py-1 rounded bg-red-600/10 text-red-700 dark:text-red-300">
+            <li key={i} className="px-2 py-1 rounded bg-red-600/10 text-red-700">
               ⚠ {w.detail}
             </li>
           ))}

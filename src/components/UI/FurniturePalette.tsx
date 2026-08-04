@@ -25,9 +25,9 @@ const CATEGORY_LABEL: Record<FurnitureCategory, string> = {
 }
 
 const SOURCE_BADGE: Record<FurnitureSource, string> = {
-  owned: 'bg-green-600/15 text-green-800 dark:text-green-300',
-  considering: 'bg-amber-600/15 text-amber-800 dark:text-amber-300',
-  generic: 'bg-black/5 dark:bg-white/10 text-current',
+  owned: 'bg-green-600/15 text-green-800',
+  considering: 'bg-amber-600/15 text-amber-800',
+  generic: 'bg-black/5 text-current',
 }
 
 export function FurniturePalette({ roomId, roomCenter }: FurniturePaletteProps) {
@@ -51,7 +51,7 @@ export function FurniturePalette({ roomId, roomCenter }: FurniturePaletteProps) 
     <div className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <h3 className="font-medium text-sm">Add furniture</h3>
-        <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 dark:bg-white/10 hover:bg-black/10" onClick={() => setShowCustomForm(true)}>
+        <button className="min-h-10 px-3 py-2 text-xs rounded bg-black/5 hover:bg-black/10" onClick={() => setShowCustomForm(true)}>
           + Custom item
         </button>
       </div>
@@ -75,7 +75,7 @@ export function FurniturePalette({ roomId, roomCenter }: FurniturePaletteProps) 
               {entries.map((entry) => (
                 <button
                   key={entry.id}
-                  className="min-h-10 px-3 py-2 text-xs rounded border border-black/10 dark:border-white/15 hover:bg-black/5 dark:hover:bg-white/10 flex items-center gap-1"
+                  className="min-h-10 px-3 py-2 text-xs rounded border border-black/10 hover:bg-black/5 flex items-center gap-1"
                   onClick={() => addItem(roomId, entry, roomCenter.x - entry.defaultW / 2, roomCenter.y - entry.defaultD / 2)}
                   title={`${entry.defaultW} x ${entry.defaultD} cm`}
                 >
