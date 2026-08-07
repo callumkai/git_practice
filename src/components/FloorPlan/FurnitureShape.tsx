@@ -43,28 +43,57 @@ function LSofaShape({ item, colliding }: ShapeProps) {
   const { w, d } = item
   const chaiseSide = item.chaiseSide ?? 'right'
   const armDepth = Math.min(90, d)
-  const chaiseWidth = Math.min(d, w)
+  const chaiseWidth = Math.min(armDepth, w)
   const fill = colliding ? '#c0605a' : UPHOLSTERY.lsofa
+  const backDepth = Math.min(16, armDepth * 0.3)
 
   const path =
     chaiseSide === 'right'
       ? `M0,0 L${w},0 L${w},${d} L${w - chaiseWidth},${d} L${w - chaiseWidth},${armDepth} L0,${armDepth} Z`
       : `M0,0 L${w},0 L${w},${armDepth} L${chaiseWidth},${armDepth} L${chaiseWidth},${d} L0,${d} Z`
 
-  const armRunWidth = w - chaiseWidth
-  const armRunX = chaiseSide === 'right' ? 0 : chaiseWidth
+  const runWidth = Math.max(w - chaiseWidth, 0)
+  const runX = chaiseSide === 'right' ? 0 : chaiseWidth
+  const chaiseX = chaiseSide === 'right' ? w - chaiseWidth : 0
+  const armX = chaiseSide === 'right' ? 0 : w - Math.min(14, runWidth * 0.15)
+  const armWidth = Math.min(14, runWidth * 0.15)
+
+  const seatWidth = Math.max(runWidth - armWidth, 0)
+  const seatX0 = chaiseSide === 'right' ? armX + armWidth : runX
+  const cushionCount = Math.max(1, Math.round(seatWidth / 70))
+  const cushionW = seatWidth / cushionCount
 
   return (
     <g>
       <path d={path} fill={fill} stroke="#00000030" strokeWidth={1} />
-      {/* back cushion strip along the top run */}
-      <rect x={armRunX} y={0} width={Math.max(armRunWidth, 0)} height={Math.min(16, armDepth * 0.3)} fill="#00000018" />
-      {/* back cushion along the chaise's outer edge */}
-      {chaiseSide === 'right' ? (
-        <rect x={w - Math.min(16, chaiseWidth * 0.2)} y={0} width={Math.min(16, chaiseWidth * 0.2)} height={d} fill="#00000018" />
-      ) : (
-        <rect x={0} y={0} width={Math.min(16, chaiseWidth * 0.2)} height={d} fill="#00000018" />
-      )}
+      {/* back cushion strip along the whole back edge */}
+      <rect x={0} y={0} width={w} height={backDepth} fill="#00000018" rx={3} />
+      {/* outer arm at the far end of the straight run */}
+      <rect x={armX} y={0} width={armWidth} height={armDepth} fill="#00000022" rx={4} />
+      {/* seat cushion dividers along the run */}
+      {Array.from({ length: cushionCount - 1 }, (_, i) => (
+        <line
+          key={i}
+          x1={seatX0 + cushionW * (i + 1)}
+          y1={backDepth}
+          x2={seatX0 + cushionW * (i + 1)}
+          y2={armDepth - 3}
+          stroke="#00000025"
+          strokeWidth={1.5}
+        />
+      ))}
+      <rect x={seatX0} y={backDepth} width={seatWidth} height={Math.max(armDepth - backDepth - 3, 0)} fill="none" stroke="#00000018" strokeWidth={1} rx={3} />
+      {/* chaise seat cushion */}
+      <rect
+        x={chaiseX + 3}
+        y={armDepth}
+        width={Math.max(chaiseWidth - 6, 0)}
+        height={Math.max(d - armDepth - 4, 0)}
+        fill="none"
+        stroke="#00000018"
+        strokeWidth={1}
+        rx={3}
+      />
     </g>
   )
 }

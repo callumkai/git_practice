@@ -6,11 +6,13 @@ export const LSOFA_ARM_DEPTH = 90
 
 /**
  * Unrotated L-shaped sofa footprint: a straight run of depth LSOFA_ARM_DEPTH
- * along the top, with a deeper chaise square of depth `d` at one end.
+ * along the top (the full width `w`), with a chaise leg — roughly as wide as
+ * the run is deep, matching a real sectional's proportions rather than a
+ * deep square — extending forward to the full depth `d` at one end.
  */
 function lsofaUnrotatedPolygon(w: number, d: number, chaiseSide: 'left' | 'right'): Point[] {
   const armDepth = Math.min(LSOFA_ARM_DEPTH, d)
-  const chaiseWidth = Math.min(d, w)
+  const chaiseWidth = Math.min(armDepth, w)
   if (chaiseSide === 'right') {
     return [
       { x: 0, y: 0 },
