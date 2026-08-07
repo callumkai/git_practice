@@ -4,8 +4,9 @@ export const FURNITURE_LIBRARY: FurnitureLibraryEntry[] = [
   { id: 'sofa-2seater', category: 'sofa', name: 'Sofa (2-seater)', defaultW: 160, defaultD: 90, source: 'generic' },
   { id: 'sofa-3seater', category: 'sofa', name: 'Sofa (3-seater)', defaultW: 200, defaultD: 90, source: 'generic' },
   { id: 'sofa-4seater', category: 'sofa', name: 'Sofa (4-seater)', defaultW: 240, defaultD: 95, source: 'generic' },
-  { id: 'lsofa-right', category: 'lsofa', name: 'L-shaped sofa (right chaise)', defaultW: 260, defaultD: 160, source: 'generic', chaiseSide: 'right' },
-  { id: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa (left chaise)', defaultW: 260, defaultD: 160, source: 'generic', chaiseSide: 'left' },
+  // Next "Parker" medium corner chaise: W277 x D177cm (their listed H90 is seat height, not a footprint dimension).
+  { id: 'lsofa-right', category: 'lsofa', name: 'L-shaped sofa (Next Parker, right chaise)', defaultW: 277, defaultD: 177, source: 'considering', chaiseSide: 'right' },
+  { id: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa (Next Parker, left chaise)', defaultW: 277, defaultD: 177, source: 'considering', chaiseSide: 'left' },
   { id: 'armchair', category: 'armchair', name: 'Armchair', defaultW: 80, defaultD: 85, source: 'generic' },
   { id: 'coffee-table', category: 'coffeeTable', name: 'Coffee table', defaultW: 120, defaultD: 60, source: 'generic' },
   { id: 'coffee-table-small', category: 'coffeeTable', name: 'Coffee table (small)', defaultW: 90, defaultD: 50, source: 'generic' },

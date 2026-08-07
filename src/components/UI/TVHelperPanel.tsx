@@ -15,6 +15,8 @@ interface TVHelperPanelProps {
   onHighlightRunsChange: (runs: { edgeIndex: number; start: number; end: number }[]) => void
 }
 
+const COMMON_SIZES = [60, 65, 70, 75]
+
 const STATUS_LABEL: Record<string, string> = {
   'too-close': 'A bit close',
   comfortable: 'Comfortable',
@@ -64,6 +66,20 @@ export function TVHelperPanel({ room, items, onHighlightRunsChange }: TVHelperPa
     <div className="flex flex-col gap-3 text-sm">
       <label className="text-xs flex flex-col gap-1">
         Screen size
+
+        <div className="flex flex-wrap gap-1.5 mt-1 mb-1">
+          {COMMON_SIZES.map((size) => (
+            <button
+              key={size}
+              type="button"
+              className={`min-h-11 px-3 rounded text-sm ${inches === size ? 'bg-blue-600 text-white' : 'bg-black/5 hover:bg-black/10'}`}
+              onClick={() => setInches(size)}
+            >
+              {size}"
+            </button>
+          ))}
+        </div>
+
         <div className="flex items-center gap-2">
           <button
             type="button"

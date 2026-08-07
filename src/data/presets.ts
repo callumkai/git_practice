@@ -52,8 +52,8 @@ export function buildLivingRoomPresets(): { name: string; items: FurnitureItem[]
   // L-shaped sofa (chaise on the left) fills the top-left corner under the
   // conservatory door, table in its open pocket, armchair opposite, TV east.
   const conversation: FurnitureItem[] = [
-    item({ libraryId: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa', w: 260, d: 160, chaiseSide: 'left', x: 0, y: 0, rotation: 0 }),
-    item({ libraryId: 'coffee-table', category: 'coffeeTable', name: 'Coffee table', w: 110, d: 55, x: 170, y: 170, rotation: 0 }),
+    item({ libraryId: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa (Next Parker)', w: 277, d: 177, chaiseSide: 'left', x: 0, y: 0, rotation: 0 }),
+    item({ libraryId: 'coffee-table', category: 'coffeeTable', name: 'Coffee table', w: 110, d: 55, x: 185, y: 185, rotation: 0 }),
     item({ libraryId: 'armchair', category: 'armchair', name: 'Armchair', w: 80, d: 85, x: 390, y: 250, rotation: 180 }),
     item({ libraryId: 'tv-unit', category: 'tvUnit', name: 'TV unit', w: 150, d: 40, ...wallPlacement('E', 150, 40, 80) }),
   ]
@@ -61,7 +61,7 @@ export function buildLivingRoomPresets(): { name: string; items: FurnitureItem[]
   // A bigger L-shaped sofa doing more of the work: same top-left anchor,
   // table centred in front, TV on the hall wall.
   const lShapedSofa: FurnitureItem[] = [
-    item({ libraryId: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa', w: 280, d: 170, chaiseSide: 'left', x: 0, y: 0, rotation: 0 }),
+    item({ libraryId: 'lsofa-left', category: 'lsofa', name: 'L-shaped sofa (Next Parker)', w: 277, d: 177, chaiseSide: 'left', x: 0, y: 0, rotation: 0 }),
     item({ libraryId: 'coffee-table', category: 'coffeeTable', name: 'Coffee table', w: 120, d: 60, x: 200, y: 190, rotation: 0 }),
     item({ libraryId: 'tv-unit', category: 'tvUnit', name: 'TV unit', w: 150, d: 40, ...wallPlacement('S', 150, 40, 280) }),
   ]

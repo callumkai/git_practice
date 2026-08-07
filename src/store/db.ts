@@ -7,11 +7,12 @@ export class PlannerDb extends Dexie {
   customLibrary!: Table<FurnitureLibraryEntry, string>
 
   constructor() {
-    // Bumped again (was 'mulberry-grove-planner-v2') — presets were replaced
-    // with the user's own 8-option set, so anyone on v2 needs a fresh seed
-    // too. See v2's comment: the seed step only runs when a room has no
-    // saved layouts yet, so a name bump is what actually forces it.
-    super('mulberry-grove-planner-v3')
+    // Bumped again (was 'mulberry-grove-planner-v3') — L-shaped sofa
+    // dimensions were corrected to a real product's measurements, which
+    // changed two presets that use it. See v2's comment: the seed step only
+    // runs when a room has no saved layouts yet, so a name bump is what
+    // actually forces a fresh one.
+    super('mulberry-grove-planner-v4')
     this.version(1).stores({
       layouts: 'id, roomId',
       houseSettings: 'id',
