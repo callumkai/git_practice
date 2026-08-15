@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { OPENINGS, ROOMS } from '../data/house'
 import { computeDoorSwing, doorSwingPolygon } from './doorSwing'
 import { rectContainsPoint } from './geometry'
+import { roomContainsPointExact } from './room'
 
 function opening(id: string) {
   const o = OPENINGS.find((x) => x.id === id)
@@ -20,7 +21,9 @@ describe('computeDoorSwing', () => {
     const swing = computeDoorSwing(opening('bedroom1Door'))
     expect(swing).not.toBeNull()
     expect(rectContainsPoint(room('bedroom1').rect, swing!.openEnd)).toBe(true)
-    expect(rectContainsPoint(room('landing').rect, swing!.openEnd)).toBe(false)
+    // Landing is a staircase-shaped room now (its bounding rect legitimately
+    // overlaps Bedroom 1's), so this needs the true polygon, not the rect.
+    expect(roomContainsPointExact(room('landing'), swing!.openEnd)).toBe(false)
   })
 
   it('sweeps the en-suite door into the en-suite, not bedroom 1', () => {
