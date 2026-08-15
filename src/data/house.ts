@@ -75,25 +75,28 @@ export const ROOMS: RoomDef[] = [
     // door (Bedroom 2, En-suite's corridor, Bedroom 1, the bathroom) rather
     // than leaving those doors opening into unclaimed floor space, which is
     // what the floor plan photo's gap between Bedroom 2 and the landing was.
+    // Stops at x=349 (not the outer wall) between y=311 and y=460 — the strip
+    // out to the outer wall there is the airing cupboard, not landing floor.
     extraRects: [
       { x: 0, y: 206, w: 254, h: 105 },
-      { x: 0, y: 311, w: 514, h: 28 },
-      { x: 0, y: 339, w: 349, h: 121 },
+      { x: 0, y: 311, w: 349, h: 149 },
       { x: 0, y: 460, w: 213, h: 130 },
     ],
     polygon: [
       { x: 0, y: 206 },
       { x: 254, y: 206 },
       { x: 254, y: 311 },
-      { x: 514, y: 311 },
-      { x: 514, y: 339 },
-      { x: 349, y: 339 },
+      { x: 349, y: 311 },
       { x: 349, y: 460 },
       { x: 213, y: 460 },
       { x: 213, y: 590 },
       { x: 0, y: 590 },
     ],
   },
+  // Shallow storage strip between Bedroom 2's south wall and En-suite's north
+  // wall, out to the outer wall — the landing doesn't reach this far right,
+  // it's a built-in cupboard (dimensions read off the gap, not surveyed).
+  { id: 'ensuiteStorage', name: 'Airing cupboard', floor: 'first', rect: { x: 349, y: 311, w: 165, h: 28 } },
   { id: 'ensuite', name: 'En-suite', floor: 'first', rect: { x: 349, y: 339, w: 165, h: 121 } },
   { id: 'bedroom1', name: 'Bedroom 1', floor: 'first', rect: { x: 213, y: 460, w: 301, h: 321 } },
   { id: 'bathroom', name: 'Bathroom', floor: 'first', rect: { x: 0, y: 590, w: 202, h: 191 } },
@@ -229,6 +232,21 @@ export const OPENINGS: OpeningDef[] = [
     floor: 'first',
     servesRoomId: 'bedroom1',
     swingIntoRoomId: 'bedroom1',
+  },
+  // The airing cupboard's only wall long enough for a door is the one shared
+  // with the en-suite (its other two long walls border Bedroom 2 and the
+  // outer wall) — position is a visual estimate, not a survey figure.
+  {
+    id: 'ensuiteStorageDoor',
+    label: 'Airing cupboard door',
+    kind: 'door',
+    size: 60,
+    from: { x: 400, y: 339 },
+    to: { x: 460, y: 339 },
+    floor: 'first',
+    servesRoomId: 'ensuite',
+    swingIntoRoomId: 'ensuiteStorage',
+    positionEstimated: true,
   },
   {
     id: 'bedroom1EnsuiteDoor',
