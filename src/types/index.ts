@@ -48,6 +48,7 @@ export type FurnitureCategory =
   | 'armchair'
   | 'coffeeTable'
   | 'bed'
+  | 'bedsideTable'
   | 'wardrobe'
   | 'chest'
   | 'desk'

@@ -12,6 +12,7 @@ const CATEGORIES: FurnitureCategory[] = [
   'armchair',
   'coffeeTable',
   'bed',
+  'bedsideTable',
   'wardrobe',
   'chest',
   'desk',

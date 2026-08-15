@@ -12,11 +12,16 @@ export const FURNITURE_LIBRARY: FurnitureLibraryEntry[] = [
   { id: 'coffee-table-small', category: 'coffeeTable', name: 'Coffee table (small)', defaultW: 90, defaultD: 50, source: 'generic' },
 
   { id: 'bed-mine', category: 'bed', name: 'My bed', defaultW: 160, defaultD: 210, source: 'owned' },
+  // UK mattress sizes, smallest to largest. "Queen" isn't a traditional UK size (it's the US 152x203
+  // standard) but is now sold by some UK brands, so it's included, ordered by its actual footprint.
   { id: 'bed-single', category: 'bed', name: 'Bed (single)', defaultW: 90, defaultD: 190, source: 'generic' },
+  { id: 'bed-small-double', category: 'bed', name: 'Bed (small double)', defaultW: 120, defaultD: 190, source: 'generic' },
   { id: 'bed-double', category: 'bed', name: 'Bed (double)', defaultW: 135, defaultD: 190, source: 'generic' },
-  { id: 'bed-queen', category: 'bed', name: 'Bed (queen)', defaultW: 152, defaultD: 203, source: 'generic' },
   { id: 'bed-king', category: 'bed', name: 'Bed (king)', defaultW: 150, defaultD: 200, source: 'generic' },
+  { id: 'bed-queen', category: 'bed', name: 'Bed (queen, US size)', defaultW: 152, defaultD: 203, source: 'generic' },
   { id: 'bed-super-king', category: 'bed', name: 'Bed (super king)', defaultW: 180, defaultD: 200, source: 'generic' },
+
+  { id: 'bedside-table', category: 'bedsideTable', name: 'Bedside table', defaultW: 45, defaultD: 40, source: 'generic' },
 
   { id: 'wardrobe-double', category: 'wardrobe', name: 'Wardrobe (double)', defaultW: 100, defaultD: 60, source: 'generic' },
   { id: 'wardrobe-triple', category: 'wardrobe', name: 'Wardrobe (triple)', defaultW: 150, defaultD: 60, source: 'generic' },

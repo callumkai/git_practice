@@ -159,6 +159,18 @@ function ChestShape({ item, colliding }: ShapeProps) {
   )
 }
 
+function BedsideTableShape({ item, colliding }: ShapeProps) {
+  const { w, d } = item
+  const fill = colliding ? '#c0605a' : '#8a6f57'
+  return (
+    <g>
+      <rect x={0} y={0} width={w} height={d} rx={3} fill={fill} stroke="#00000040" strokeWidth={1} />
+      <line x1={2} y1={d * 0.55} x2={w - 2} y2={d * 0.55} stroke="#00000035" strokeWidth={1} />
+      <circle cx={w / 2} cy={d * 0.77} r={1.6} fill="#eee" />
+    </g>
+  )
+}
+
 function DeskShape({ item, colliding }: ShapeProps) {
   const { w, d } = item
   const fill = colliding ? '#c0605a' : '#a9866a'
@@ -225,6 +237,8 @@ export function FurnitureShapeBody(props: ShapeProps) {
       return <ArmchairShape {...props} />
     case 'bed':
       return <BedShape {...props} />
+    case 'bedsideTable':
+      return <BedsideTableShape {...props} />
     case 'wardrobe':
       return <WardrobeShape {...props} />
     case 'chest':

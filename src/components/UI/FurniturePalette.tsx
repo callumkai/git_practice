@@ -15,6 +15,7 @@ const CATEGORY_LABEL: Record<FurnitureCategory, string> = {
   armchair: 'Armchairs',
   coffeeTable: 'Coffee tables',
   bed: 'Beds',
+  bedsideTable: 'Bedside tables',
   wardrobe: 'Wardrobes',
   chest: 'Chests of drawers',
   desk: 'Desks',
@@ -75,12 +76,16 @@ export function FurniturePalette({ roomId, roomCenter }: FurniturePaletteProps) 
               {entries.map((entry) => (
                 <button
                   key={entry.id}
-                  className="min-h-10 px-3 py-2 text-xs rounded border border-black/10 hover:bg-black/5 flex items-center gap-1"
+                  className="min-h-10 px-3 py-2 text-xs rounded border border-black/10 hover:bg-black/5 flex flex-col items-start gap-0.5"
                   onClick={() => addItem(roomId, entry, roomCenter.x - entry.defaultW / 2, roomCenter.y - entry.defaultD / 2)}
-                  title={`${entry.defaultW} x ${entry.defaultD} cm`}
                 >
-                  {entry.name}
-                  {entry.source !== 'generic' && <span className={`px-1 rounded ${SOURCE_BADGE[entry.source]}`}>{entry.source}</span>}
+                  <span className="flex items-center gap-1">
+                    {entry.name}
+                    {entry.source !== 'generic' && <span className={`px-1 rounded ${SOURCE_BADGE[entry.source]}`}>{entry.source}</span>}
+                  </span>
+                  <span className="opacity-60">
+                    {entry.defaultW} x {entry.defaultD} cm
+                  </span>
                 </button>
               ))}
             </div>
