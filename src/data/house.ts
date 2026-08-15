@@ -135,15 +135,31 @@ export const OPENINGS: OpeningDef[] = [
     servesRoomId: 'bedroom2',
     swingIntoRoomId: 'bedroom2',
   },
+  // Built into the wall recess (zero floor depth of its own) with two hinged
+  // doors, each opening outward into the room — modelled as two door leaves,
+  // hinged at the outer edges, splitting the surveyed 136cm width evenly
+  // (the 68/68 split is an assumption; the total width is the survey figure).
   {
-    id: 'bedroom1Wardrobe',
-    label: 'Bedroom 1 fitted wardrobe',
+    id: 'bedroom1WardrobeDoorLeft',
+    label: 'Bedroom 1 fitted wardrobe (left door)',
     kind: 'fittedWardrobe',
-    size: 136,
+    size: 68,
     from: { x: 221, y: 460 },
-    to: { x: 357, y: 460 },
+    to: { x: 289, y: 460 },
     floor: 'first',
     servesRoomId: 'bedroom1',
+    swingIntoRoomId: 'bedroom1',
+  },
+  {
+    id: 'bedroom1WardrobeDoorRight',
+    label: 'Bedroom 1 fitted wardrobe (right door)',
+    kind: 'fittedWardrobe',
+    size: 68,
+    from: { x: 357, y: 460 },
+    to: { x: 289, y: 460 },
+    floor: 'first',
+    servesRoomId: 'bedroom1',
+    swingIntoRoomId: 'bedroom1',
   },
   {
     id: 'bedroom1EnsuiteDoor',

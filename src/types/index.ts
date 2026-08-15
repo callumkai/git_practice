@@ -103,8 +103,6 @@ export interface HouseSettings {
   stairTurnClearance?: number
   /** Bedroom 1 window: brief has a conflicting note (80 from left vs 80 from right). */
   bedroom1WindowSide: 'left' | 'right'
-  /** Depth of the Bedroom 1 fitted wardrobe — never surveyed, defaults to a typical 60cm and is editable. */
-  fittedWardrobeDepth: number
 }
 
 export interface ClearanceResult {

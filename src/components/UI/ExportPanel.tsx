@@ -78,7 +78,7 @@ export function ExportPanel({ room, layoutName, items, svg }: ExportPanelProps) 
           >
             <PlanDefs />
             <rect x={bounds.x} y={bounds.y} width={bounds.w} height={bounds.h} fill="#f4ede1" />
-            <RoomWalls room={room} floor={room.floor} openings={openings} showSwings fittedWardrobeDepth={houseSettings.fittedWardrobeDepth} />
+            <RoomWalls room={room} floor={room.floor} openings={openings} showSwings />
             {items.map((item) => (
               <FurnitureItemView key={item.id} item={item} interactive={false} />
             ))}

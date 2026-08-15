@@ -28,7 +28,7 @@ function MiniPlan({ room, layoutId }: { room: RoomDef; layoutId: string }) {
       <div className="text-sm font-medium truncate">{layout?.name ?? 'Layout'}</div>
       <svg viewBox={viewBox} className="w-full aspect-square rounded-lg bg-paper">
         <PlanDefs />
-        <RoomWalls room={room} floor={room.floor} openings={openings} fittedWardrobeDepth={houseSettings.fittedWardrobeDepth} />
+        <RoomWalls room={room} floor={room.floor} openings={openings} />
         {(layout?.items ?? []).map((item) => (
           <FurnitureItemView key={item.id} item={item} interactive={false} />
         ))}

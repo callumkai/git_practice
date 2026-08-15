@@ -40,9 +40,22 @@ describe('computeDoorSwing', () => {
     expect(swing!.radius).toBe(83)
   })
 
-  it('returns null for windows and fitted wardrobes', () => {
+  it('returns null for windows', () => {
     expect(computeDoorSwing(opening('livingRoomWindow'))).toBeNull()
-    expect(computeDoorSwing(opening('bedroom1Wardrobe'))).toBeNull()
+  })
+
+  it('sweeps both fitted wardrobe doors outward into the bedroom, hinged at the outer edges', () => {
+    const left = computeDoorSwing(opening('bedroom1WardrobeDoorLeft'))!
+    const right = computeDoorSwing(opening('bedroom1WardrobeDoorRight'))!
+    expect(left).not.toBeNull()
+    expect(right).not.toBeNull()
+    expect(left.radius).toBe(68)
+    expect(right.radius).toBe(68)
+    expect(rectContainsPoint(room('bedroom1').rect, left.openEnd)).toBe(true)
+    expect(rectContainsPoint(room('bedroom1').rect, right.openEnd)).toBe(true)
+    // Hinged at the outer edges (221 and 357), not the shared middle (289).
+    expect(left.hinge.x).toBe(221)
+    expect(right.hinge.x).toBe(357)
   })
 
   it('produces a swing polygon whose vertices stay within the door radius of the hinge', () => {

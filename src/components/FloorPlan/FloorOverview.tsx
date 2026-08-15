@@ -55,7 +55,7 @@ export function FloorOverview({ floor, onSelectRoom }: FloorOverviewProps) {
           const b = polygonBounds(roomPolygon(room))
           return (
             <g key={room.id} onClick={() => onSelectRoom(room.id)} className="cursor-pointer">
-              <RoomWalls room={room} floor={floor} openings={openings} fittedWardrobeDepth={houseSettings.fittedWardrobeDepth} />
+              <RoomWalls room={room} floor={floor} openings={openings} />
               {items.map((item) => (
                 <FurnitureItemView key={item.id} item={item} interactive={false} />
               ))}

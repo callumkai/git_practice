@@ -1,22 +1,17 @@
-import type { CollisionResult, FurnitureItem, HouseSettings, OpeningDef, RoomDef } from '../types'
+import type { CollisionResult, FurnitureItem, OpeningDef, RoomDef } from '../types'
 import { computeDoorSwing, doorSwingPolygon } from './doorSwing'
-import { computeFittedObstaclePolygon } from './fittedObstacles'
 import { itemFootprintPolygon } from './furnitureShape'
 import { polygonFullyInside, polygonsOverlap } from './geometry'
 import { roomPolygon } from './room'
 
-export function checkRoomCollisions(
-  items: FurnitureItem[],
-  room: RoomDef,
-  openings: OpeningDef[],
-  settings: Pick<HouseSettings, 'fittedWardrobeDepth'>,
-): CollisionResult[] {
+/**
+ * Fitted wardrobe doors are treated exactly like real doors here: no solid
+ * obstacle (the wardrobe is built into the wall, zero floor depth of its
+ * own), just a swing zone furniture can't be placed in — same as every
+ * other door.
+ */
+export function checkRoomCollisions(items: FurnitureItem[], room: RoomDef, openings: OpeningDef[]): CollisionResult[] {
   const roomPoly = roomPolygon(room)
-
-  const fittedObstacles = openings
-    .filter((o) => o.kind === 'fittedWardrobe' && o.servesRoomId === room.id)
-    .map((o) => ({ label: o.label, polygon: computeFittedObstaclePolygon(o, settings.fittedWardrobeDepth) }))
-    .filter((o): o is { label: string; polygon: NonNullable<ReturnType<typeof computeFittedObstaclePolygon>> } => o.polygon !== null)
 
   const doorSwings = openings
     .filter((o) => o.swingIntoRoomId === room.id)
@@ -38,12 +33,6 @@ export function checkRoomCollisions(
       if (other.id === item.id) continue
       if (polygonsOverlap(footprint, itemFootprintPolygon(other))) {
         reasons.push(`Overlaps ${other.name}`)
-      }
-    }
-
-    for (const obstacle of fittedObstacles) {
-      if (polygonsOverlap(footprint, obstacle.polygon)) {
-        reasons.push(`Overlaps the ${obstacle.label.toLowerCase()}`)
       }
     }
 

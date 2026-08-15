@@ -34,20 +34,10 @@ export function HouseSettingsPanel({ currentRoomItems }: HouseSettingsPanelProps
         here yet.
       </p>
 
-      <label className="flex flex-col gap-1">
-        Fitted wardrobe depth, Bedroom 1 (never surveyed — est.)
-        <div className="flex items-center gap-2">
-          <input
-            type="range"
-            min={30}
-            max={70}
-            value={settings.fittedWardrobeDepth}
-            onChange={(e) => updateHouseSettings({ fittedWardrobeDepth: Number(e.target.value) })}
-            className="flex-1"
-          />
-          <span className="w-14 text-right">{settings.fittedWardrobeDepth}cm</span>
-        </div>
-      </label>
+      <p className="opacity-70">
+        Bedroom 1's fitted wardrobe is built into the wall, so it doesn't take up floor depth — only its two doors swinging open do, and those are sized
+        from the surveyed 136cm width, not a guess.
+      </p>
 
       <div className="grid grid-cols-2 gap-2 pt-2 border-t border-black/10">
         <label className="flex flex-col gap-1">

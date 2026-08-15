@@ -10,7 +10,6 @@ function uid(): string {
 
 export const DEFAULT_HOUSE_SETTINGS: HouseSettings = {
   bedroom1WindowSide: 'right',
-  fittedWardrobeDepth: 60,
 }
 
 interface PlannerState {

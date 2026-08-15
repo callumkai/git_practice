@@ -62,7 +62,7 @@ export function RoomCanvas({ room, highlightRuns = [], onSvgReady }: RoomCanvasP
   )
   const { viewBoxAttr, handlers, resetView } = usePanZoom(initialViewBox, svgRef)
 
-  const collisions = useMemo(() => checkRoomCollisions(items, room, openings, houseSettings), [items, room, openings, houseSettings])
+  const collisions = useMemo(() => checkRoomCollisions(items, room, openings), [items, room, openings])
   const collisionMap = useMemo(() => new Map(collisions.map((c) => [c.itemId, c])), [collisions])
 
   const [dragState, setDragState] = useState<{ itemId: string; offsetX: number; offsetY: number } | null>(null)
@@ -212,7 +212,7 @@ export function RoomCanvas({ room, highlightRuns = [], onSvgReady }: RoomCanvasP
           floor={room.floor}
           openings={openings}
           showSwings
-          fittedWardrobeDepth={houseSettings.fittedWardrobeDepth}
+         
           highlightRuns={highlightRuns}
         />
         {showDimensions && <DimensionLines room={room} floor={room.floor} openings={openings} />}

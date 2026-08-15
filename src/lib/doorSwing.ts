@@ -15,9 +15,12 @@ export interface DoorSwing {
   sweepFlag: 0 | 1
 }
 
-/** Computes the quarter-circle swing arc for a door, hinged at its `from` point. */
+/**
+ * Computes the quarter-circle swing arc for a door (or a fitted wardrobe's
+ * hinged door leaf — same geometry, hinged at its `from` point).
+ */
 export function computeDoorSwing(opening: OpeningDef): DoorSwing | null {
-  if (opening.kind !== 'door' || !opening.swingIntoRoomId) return null
+  if ((opening.kind !== 'door' && opening.kind !== 'fittedWardrobe') || !opening.swingIntoRoomId) return null
   const room = roomById(opening.swingIntoRoomId)
   if (!room) return null
 

@@ -14,6 +14,7 @@ export const FURNITURE_LIBRARY: FurnitureLibraryEntry[] = [
   { id: 'bed-mine', category: 'bed', name: 'My bed', defaultW: 160, defaultD: 210, source: 'owned' },
   { id: 'bed-single', category: 'bed', name: 'Bed (single)', defaultW: 90, defaultD: 190, source: 'generic' },
   { id: 'bed-double', category: 'bed', name: 'Bed (double)', defaultW: 135, defaultD: 190, source: 'generic' },
+  { id: 'bed-queen', category: 'bed', name: 'Bed (queen)', defaultW: 152, defaultD: 203, source: 'generic' },
   { id: 'bed-king', category: 'bed', name: 'Bed (king)', defaultW: 150, defaultD: 200, source: 'generic' },
   { id: 'bed-super-king', category: 'bed', name: 'Bed (super king)', defaultW: 180, defaultD: 200, source: 'generic' },
 

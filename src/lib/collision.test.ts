@@ -14,20 +14,18 @@ function makeItem(overrides: Partial<FurnitureItem> & Pick<FurnitureItem, 'id' |
   }
 }
 
-const settings = { fittedWardrobeDepth: 60 }
-
 describe('checkRoomCollisions', () => {
   it('reports no collision for a well-placed lone item', () => {
     const room = roomById('kitchenDining')!
     const item = makeItem({ id: 'a', x: 400, y: 600, w: 60, d: 60 })
-    const results = checkRoomCollisions([item], room, OPENINGS, settings)
+    const results = checkRoomCollisions([item], room, OPENINGS)
     expect(results[0]!.colliding).toBe(false)
   })
 
   it('flags an item that extends past the room wall', () => {
     const room = roomById('kitchenDining')!
     const item = makeItem({ id: 'a', x: -100, y: 600, w: 60, d: 60 })
-    const results = checkRoomCollisions([item], room, OPENINGS, settings)
+    const results = checkRoomCollisions([item], room, OPENINGS)
     expect(results[0]!.colliding).toBe(true)
     expect(results[0]!.reasons).toContain('Extends past the room wall')
   })
@@ -36,7 +34,7 @@ describe('checkRoomCollisions', () => {
     const room = roomById('kitchenDining')!
     const a = makeItem({ id: 'a', name: 'Sofa', x: 300, y: 600, w: 100, d: 100 })
     const b = makeItem({ id: 'b', name: 'Coffee table', x: 350, y: 650, w: 60, d: 60 })
-    const results = checkRoomCollisions([a, b], room, OPENINGS, settings)
+    const results = checkRoomCollisions([a, b], room, OPENINGS)
     const forA = results.find((r) => r.itemId === 'a')!
     const forB = results.find((r) => r.itemId === 'b')!
     expect(forA.colliding).toBe(true)
@@ -47,23 +45,24 @@ describe('checkRoomCollisions', () => {
   it('flags an item placed inside the kitchen door swing', () => {
     const room = roomById('kitchenDining')!
     const item = makeItem({ id: 'a', x: 240, y: 410, w: 20, d: 20 })
-    const results = checkRoomCollisions([item], room, OPENINGS, settings)
+    const results = checkRoomCollisions([item], room, OPENINGS)
     expect(results[0]!.colliding).toBe(true)
     expect(results[0]!.reasons.some((r) => r.toLowerCase().includes('swing'))).toBe(true)
   })
 
-  it('flags an item placed against the bedroom 1 fitted wardrobe', () => {
+  it('flags an item inside the fitted wardrobe left door swing, built into the wall (no solid obstacle)', () => {
     const room = roomById('bedroom1')!
-    const item = makeItem({ id: 'a', x: 250, y: 470, w: 20, d: 20 })
-    const results = checkRoomCollisions([item], room, openingsForRoom('bedroom1'), settings)
+    // Hinge at (221,460), radius 68 — well inside the left leaf's quarter-circle swing.
+    const item = makeItem({ id: 'a', x: 235, y: 465, w: 15, d: 15 })
+    const results = checkRoomCollisions([item], room, openingsForRoom('bedroom1'))
     expect(results[0]!.colliding).toBe(true)
     expect(results[0]!.reasons.some((r) => r.includes('wardrobe'))).toBe(true)
   })
 
-  it('does not flag a wardrobe collision beyond the configured depth', () => {
+  it('does not flag a wardrobe collision deep in the room, away from either door swing', () => {
     const room = roomById('bedroom1')!
     const item = makeItem({ id: 'a', x: 250, y: 700, w: 20, d: 20 })
-    const results = checkRoomCollisions([item], room, openingsForRoom('bedroom1'), settings)
+    const results = checkRoomCollisions([item], room, openingsForRoom('bedroom1'))
     expect(results[0]!.reasons.some((r) => r.includes('wardrobe'))).toBe(false)
   })
 
@@ -71,7 +70,7 @@ describe('checkRoomCollisions', () => {
     const room = roomById('bedroom2')!
     // Sits in the notch that was cut away from the top-left — must not be treated as inside.
     const notchItem = makeItem({ id: 'a', x: 260, y: 10, w: 20, d: 20 })
-    const results = checkRoomCollisions([notchItem], room, [], settings)
+    const results = checkRoomCollisions([notchItem], room, [])
     expect(results[0]!.colliding).toBe(true)
     expect(results[0]!.reasons).toContain('Extends past the room wall')
   })
